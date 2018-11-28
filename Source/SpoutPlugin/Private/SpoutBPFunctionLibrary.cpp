@@ -184,7 +184,9 @@ FSenderStruct* RegisterReceiver(FName spoutName){
 	HANDLE sHandle;
 	unsigned long format;
 
-	sender->GetSenderInfo(spoutName.GetPlainANSIString(), w, h, sHandle, format);
+	ANSICHAR spoutNameAnsi[NAME_SIZE];
+	spoutName.GetPlainANSIString(spoutNameAnsi);
+	sender->GetSenderInfo(spoutNameAnsi, w, h, sHandle, format);
 
 	FSenderStruct* newFSenderStruc = new FSenderStruct();
 	newFSenderStruc->SetH(h);
@@ -333,7 +335,9 @@ bool USpoutBPFunctionLibrary::CreateRegisterSender(FName spoutName, ID3D11Textur
 	UE_LOG(SpoutLog, Warning, TEXT("Created Sender: name --> %s"), *tmp);
 
 	//
-	senderResult = sender->CreateSender(spoutName.GetPlainANSIString(), desc.Width, desc.Height, sharedSendingHandle, texFormat);
+	ANSICHAR spoutNameAnsi[NAME_SIZE];
+	spoutName.GetPlainANSIString(spoutNameAnsi);
+	senderResult = sender->CreateSender(spoutNameAnsi, desc.Width, desc.Height, sharedSendingHandle, texFormat);
 	UE_LOG(SpoutLog, Warning, TEXT("Created sender DX11 with sender name : %s"), *tmp);
 
 	// remove old sender register
@@ -367,7 +371,9 @@ ESpoutState CheckSenderState(FName spoutName){
 
 	ESpoutState state = ESpoutState::noEnoR;
 
-	if (sender->FindSenderName(spoutName.GetPlainANSIString())) {
+	ANSICHAR spoutNameAnsi[NAME_SIZE];
+	spoutName.GetPlainANSIString(spoutNameAnsi);
+	if (sender->FindSenderName(spoutNameAnsi)) {
 		//UE_LOG(SpoutLog, Warning, TEXT("Sender State: --> Exist"));
 		if (bIsInListSenders) {
 			//UE_LOG(SpoutLog, Warning, TEXT("Sender State: --> Exist y Registred"));
@@ -493,7 +499,9 @@ bool USpoutBPFunctionLibrary::SpoutSender(FName spoutName, ESpoutSendTextureFrom
 	D3D11_TEXTURE2D_DESC td;
 	baseTexture->GetDesc(&td);
 
-	result = sender->UpdateSender(spoutName.GetPlainANSIString(), td.Width, td.Height, targetHandle);
+	ANSICHAR spoutNameAnsi[NAME_SIZE];
+	spoutName.GetPlainANSIString(spoutNameAnsi);
+	result = sender->UpdateSender(spoutNameAnsi, td.Width, td.Height, targetHandle);
 
 	return result;
 }
@@ -632,7 +640,9 @@ void USpoutBPFunctionLibrary::CloseSender(FName spoutName)
 		if (tempSenderStruct->spoutType == ESpoutType::Sender) {
 			UE_LOG(SpoutLog, Warning, TEXT("releasing sender %s"), *spoutName.GetPlainNameString());
 			// here really release the sender
-			sender->ReleaseSenderName(spoutName.GetPlainANSIString());
+			ANSICHAR spoutNameAnsi[NAME_SIZE];
+			spoutName.GetPlainANSIString(spoutNameAnsi);
+			sender->ReleaseSenderName(spoutNameAnsi);
 			UE_LOG(SpoutLog, Warning, TEXT("sender %s released"), *spoutName.GetPlainNameString());
 			
 		}

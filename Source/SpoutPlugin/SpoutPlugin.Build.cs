@@ -20,6 +20,8 @@ public class SpoutPlugin : ModuleRules
 	public SpoutPlugin(ReadOnlyTargetRules Target) : base(Target)
 	{
 
+        PrivatePCHHeaderFile = "Private/SpoutPluginPrivatePCH.h";
+
         PublicIncludePaths.AddRange(
             new string[] {
 				"SpoutPlugin/Public",
